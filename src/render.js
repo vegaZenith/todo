@@ -1,8 +1,10 @@
-import makeTodo from "./todo.js";
+import {makeTodo, getTodos, addTodo} from "./todo.js";
 
 let renderMain = function(){
-    let body = document.querySelector("body");
+    let body = document.querySelector("#main");
+    body.innerHTML = "";
     let todoList = document.createElement("div");
+    todoList.setAttribute("id", "todo-list");
     let addButton = document.createElement("button");
     addButton.innerText = "Add";
 
@@ -13,23 +15,29 @@ let renderMain = function(){
     }
 
     body.appendChild(todoList);
+    renderAllTodos();
     body.appendChild(addButton);
     addButton.addEventListener("click", () => {
         addButton.disabled = true;
         let todoForm = document.createElement("form");
+        todoForm.setAttribute("action", "index.html");
+        todoForm.setAttribute("method", "post")
         let titleInput = createFormInput("text");
         let descriptionInput = createFormInput("text");
         let dueDateInput = createFormInput("date");
-        let priorityInput = createFormInput("priority");
+        let priorityInput = createFormInput("text");
         let submitButton = document.createElement("button");
+        
         submitButton.innerText = "Submit";
+        submitButton.setAttribute("type", "button");
         submitButton.addEventListener("click", () => {
             let newTodo = makeTodo();
             newTodo.title = titleInput.value;
             newTodo.description = descriptionInput.value;
             newTodo.dueDate = dueDateInput.value;
             newTodo.priority = priorityInput.value;
-            
+            addTodo(newTodo);      
+            renderMain();  
         });
         todoForm.appendChild(titleInput);
         todoForm.appendChild(descriptionInput);
@@ -40,8 +48,16 @@ let renderMain = function(){
     });
 };
 
-let render = function(todo){
-    let body = document.querySelector("body");
+let renderAllTodos = function(){
+    let todos = getTodos();
+    let todoList = document.querySelector("#todo-list");
+    todos.forEach(todo => {
+        let todoElement = renderTodo(todo);
+        todoList.appendChild(todoElement);
+    });
+}
+
+let renderTodo = function(todo){
     let todoBody = document.createElement("div");
     let title = document.createElement("h2");
     title.textContent = todo.title;
@@ -59,7 +75,6 @@ let render = function(todo){
     let notes = document.createElement("p");
     notes = todo.notes;
 
-    body.appendChild(todoBody);
     todoBody.appendChild(title);
     todoBody.appendChild(description);
     todoBody.appendChild(dueDate);
@@ -78,7 +93,8 @@ let render = function(todo){
         });
         todoBody.appendChild(sublist);
     }
-    todoBody.appendChild(notes);
+    // todoBody.appendChild(notes);
+    return todoBody;
 }
 
-export {render, renderMain};
+export default renderMain;

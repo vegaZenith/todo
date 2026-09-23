@@ -1,3 +1,5 @@
+let todos = [];
+
 let makeTodo = function(){
     let title = "";
     let description = "";
@@ -54,4 +56,13 @@ let makeTodo = function(){
 
 };
 
-export default makeTodo;
+let addTodo = function(todo){
+    todos.push(todo);
+};
+
+let getTodos = function(){
+    return todos;
+}
+
+
+export {makeTodo, addTodo, getTodos};

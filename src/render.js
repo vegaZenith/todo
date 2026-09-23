@@ -8,11 +8,19 @@ let renderMain = function(){
     let addButton = document.createElement("button");
     addButton.innerText = "Add";
 
-    var createFormInput = function(type){
+    let createFormInput = function(type){
         let formInput = document.createElement("input");
         formInput.setAttribute("type", type);
         return formInput;
     }
+
+    let createSelectOption = function(value, content){
+        let option = document.createElement("option");
+        option.setAttribute("value", value);
+        option.innerText = content;
+        return option;
+    }
+
 
     body.appendChild(todoList);
     renderAllTodos();
@@ -25,7 +33,12 @@ let renderMain = function(){
         let titleInput = createFormInput("text");
         let descriptionInput = createFormInput("text");
         let dueDateInput = createFormInput("date");
-        let priorityInput = createFormInput("text");
+        let priorityInput = document.createElement("select");
+        priorityInput.setAttribute("name", "priority");
+        priorityInput.appendChild(createSelectOption("Low", "Low"));
+        priorityInput.appendChild(createSelectOption("Medium", "Medium"));
+        priorityInput.appendChild(createSelectOption("High", "High"));
+        
         let submitButton = document.createElement("button");
         
         submitButton.innerText = "Submit";
@@ -47,6 +60,7 @@ let renderMain = function(){
         body.appendChild(todoForm);
     });
 };
+
 
 let renderAllTodos = function(){
     let todos = getTodos();

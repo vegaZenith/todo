@@ -1,12 +1,33 @@
 let todos = [];
+let priorityOptions = ["Low", "Medium", "High"];
 
-let makeTodo = function(){
-    let title = "";
-    let description = "";
-    let dueDate = "";
-    let priority = null;
+let makeSublistitem = function(title){
+    let sulistTitle = title;
+    let isDone = false;
+
+    function setTitle(newTitle){
+        this.title = newTitle;
+    }
+
+    function toggleIsDone(){
+        this.isDone = !this.isDone;
+    }
+
+    return {
+        sulistTitle,
+        isDone,
+        setTitle,
+        toggleIsDone
+    };
+}
+
+let makeTodo = function(t, d, date, p){
+    let title = t;
+    let description = d;
+    let dueDate = date;
+    let priority = p;
     let notes = "";
-    let sublist = null;
+    let sublist = [];
     let isDone = false;
 
     function setTitle(newTitle){
@@ -29,12 +50,12 @@ let makeTodo = function(){
         this.notes = newNotes;
     }
 
-    function createSublist(){
-        this.sublist = [];
-    }
-
     function toggleIsDone(){
         this.isDone = !isDone;
+    }
+
+    function addToSublist(title){
+        this.sublist.push(makeSublistitem(title));
     }
 
     return {
@@ -50,7 +71,7 @@ let makeTodo = function(){
         setDueDate,
         setPriority,
         setNotes,
-        createSublist,
+        addToSublist,
         toggleIsDone
     }
 
@@ -65,4 +86,5 @@ let getTodos = function(){
 }
 
 
-export {makeTodo, addTodo, getTodos};
+
+export {makeTodo, addTodo, getTodos, priorityOptions};

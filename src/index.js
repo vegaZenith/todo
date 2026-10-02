@@ -1,3 +1,3 @@
-import renderMain from "./render.js"
+import renderMainContent from "./render.js"
 
-renderMain();
+renderMainContent();

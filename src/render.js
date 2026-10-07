@@ -38,6 +38,44 @@ let renderAddToForm = function(){
     return addTodoForm;
 }
 
+let renderEditForm = function(todo){
+    let todoTitle = document.createElement("input");
+    todoTitle.type = "text";
+    todoTitle.value = todo.title;
+
+    let todoDesc = document.createElement("input");
+    todoDesc.type = "text";
+    todoDesc.value = todo.description;
+
+    let todoDueDate = document.createElement("input");
+    todoDueDate.type = "date";
+    todoDueDate.value = todo.dueDate;
+
+    let todoChecked = document.createElement("input");
+    todoChecked.type = "checkbox";
+    if(todo.isDone){
+        todoChecked.checked = true;
+    }
+    todoChecked.addEventListener("change", () => {
+        todo.toggleIsDone();
+    });
+
+    let confirmEditButton = document.createElement("button");
+    confirmEditButton.type = "button";
+    confirmEditButton.innerText = "Confirm";
+    confirmEditButton.addEventListener(() => {
+        todo.title = todoTitle.value;
+        todo.description = todoDesc.value;
+        todo.dueDate = todoDueDate.value;
+    });
+
+    todoElement.appendChild(todoTitle);
+    todoElement.appendChild(todoDesc);
+    todoElement.appendChild(todoDueDate);
+    todoElement.appendChild(todoChecked);
+    return todoElement;
+}
+
 let renderTodo = function(todo){
     let todoElement = document.createElement("div");
     
@@ -50,6 +88,9 @@ let renderTodo = function(todo){
     let todoDueDate = document.createElement("p");
     todoDueDate.innerText = todo.dueDate;
 
+    let todoPriority = document.createElement("p");
+    todoPriority.innerText = todo.priority;
+
     let todoChecked = document.createElement("input");
     todoChecked.type = "checkbox";
     if(todo.isDone){
@@ -59,9 +100,18 @@ let renderTodo = function(todo){
         todo.toggleIsDone();
     });
 
+    todoEditButton = document.createElement("button");
+    todoEditButton.type = "button";
+
+    todoEditButton.addEventListener(() => {
+        todoElement.appendChild(renderEditForm(todo));
+        return todoElement;
+    });
+
     todoElement.appendChild(todoTitle);
     todoElement.appendChild(todoDesc);
     todoElement.appendChild(todoDueDate);
+    todoElement.appendChild(todoPriority);
     todoElement.appendChild(todoChecked);
     return todoElement;
 }

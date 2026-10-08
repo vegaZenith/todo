@@ -39,6 +39,10 @@ let renderAddToForm = function(){
 }
 
 let renderEditForm = function(todo){
+    let todoElement = document.createElement("form");
+
+    todoElement.method = "POST";
+    todoElement.action = "/";
     let todoTitle = document.createElement("input");
     todoTitle.type = "text";
     todoTitle.value = todo.title;
@@ -63,16 +67,20 @@ let renderEditForm = function(todo){
     let confirmEditButton = document.createElement("button");
     confirmEditButton.type = "button";
     confirmEditButton.innerText = "Confirm";
-    confirmEditButton.addEventListener(() => {
+    confirmEditButton.addEventListener("click", () => {
         todo.title = todoTitle.value;
         todo.description = todoDesc.value;
         todo.dueDate = todoDueDate.value;
+        todoElement.parentElement.appendChild(renderTodo(todo));
+        todoElement.remove();
+        return;
     });
 
     todoElement.appendChild(todoTitle);
     todoElement.appendChild(todoDesc);
     todoElement.appendChild(todoDueDate);
     todoElement.appendChild(todoChecked);
+    todoElement.appendChild(confirmEditButton);
     return todoElement;
 }
 
@@ -100,12 +108,14 @@ let renderTodo = function(todo){
         todo.toggleIsDone();
     });
 
-    todoEditButton = document.createElement("button");
+    let todoEditButton = document.createElement("button");
     todoEditButton.type = "button";
-
-    todoEditButton.addEventListener(() => {
+    todoEditButton.innerText = "Edit";
+    todoEditButton.addEventListener("click", () => {
+        todoElement.innerHTML = "";
         todoElement.appendChild(renderEditForm(todo));
-        return todoElement;
+        return;
+
     });
 
     todoElement.appendChild(todoTitle);
@@ -113,6 +123,7 @@ let renderTodo = function(todo){
     todoElement.appendChild(todoDueDate);
     todoElement.appendChild(todoPriority);
     todoElement.appendChild(todoChecked);
+    todoElement.appendChild(todoEditButton);
     return todoElement;
 }
 

@@ -2,11 +2,11 @@ let todos = [];
 let priorityOptions = ["Low", "Medium", "High"];
 
 let makeSublistitem = function(title){
-    let sulistTitle = title;
+    let sublistTitle = title;
     let isDone = false;
 
     function setTitle(newTitle){
-        this.title = newTitle;
+        this.sublistTitle = newTitle;
     }
 
     function toggleIsDone(){
@@ -14,7 +14,7 @@ let makeSublistitem = function(title){
     }
 
     return {
-        sulistTitle,
+        sublistTitle,
         isDone,
         setTitle,
         toggleIsDone
@@ -55,7 +55,9 @@ let makeTodo = function(t, d, date, p){
     }
 
     function addToSublist(title){
-        this.sublist.push(makeSublistitem(title));
+        let sublistItem = makeSublistitem(title);
+        this.sublist.push(sublistItem);
+        return sublistItem;
     }
 
     return {

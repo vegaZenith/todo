@@ -55,6 +55,9 @@ let renderEditForm = function(todo){
     todoDueDate.type = "date";
     todoDueDate.value = todo.dueDate;
 
+
+    let todoPriority = renderPriorityInput();
+
     let todoChecked = document.createElement("input");
     todoChecked.type = "checkbox";
     if(todo.isDone){
@@ -71,6 +74,7 @@ let renderEditForm = function(todo){
         todo.title = todoTitle.value;
         todo.description = todoDesc.value;
         todo.dueDate = todoDueDate.value;
+        todo.priority = todoPriority.value;
         todoElement.parentElement.appendChild(renderTodo(todo));
         todoElement.remove();
         return;
@@ -79,6 +83,7 @@ let renderEditForm = function(todo){
     todoElement.appendChild(todoTitle);
     todoElement.appendChild(todoDesc);
     todoElement.appendChild(todoDueDate);
+    todoElement.appendChild(todoPriority);
     todoElement.appendChild(todoChecked);
     todoElement.appendChild(confirmEditButton);
     return todoElement;

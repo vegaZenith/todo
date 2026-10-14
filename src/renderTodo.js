@@ -11,6 +11,7 @@ let makeTodoView = function (todo, parent) {
     let todoChecked;
     let todoElement;
     let todoButton;
+    let todoSublistButton;
 
     let refresh = function (oldElement) {    
         todoElement.replaceChildren();
@@ -20,6 +21,9 @@ let makeTodoView = function (todo, parent) {
         todoElement.appendChild(todoPriority);
         todoElement.appendChild(todoChecked);
         todoElement.appendChild(todoSublist);
+        if(todoSublistButton !== null){
+            todoElement.appendChild(todoSublistButton);
+        }
         todoElement.appendChild(todoButton);
         parentElemeent.replaceChild(todoElement, oldElement);
     }
@@ -117,6 +121,8 @@ let makeTodoView = function (todo, parent) {
         });
 
         todoSublist = renderEditableSublist(todoContext);
+        todoSublistButton = renderSublistButton();
+
 
         todoButton = renderConfirmEditButton();
     }
@@ -157,6 +163,7 @@ let makeTodoView = function (todo, parent) {
             return;
 
         });
+        todoSublistButton = null;
 
         todoElement.appendChild(todoTitle);
         todoElement.appendChild(todoDesc);

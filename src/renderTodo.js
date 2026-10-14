@@ -33,6 +33,9 @@ let makeTodoView = function (todo, parent) {
             opitonInput.value = option;
             opitonInput.innerText = option;
             todoPriorityInput.appendChild(opitonInput);
+            if(todoContext.priority === option){
+                opitonInput.selected = true;
+            }
         });
         return todoPriorityInput;
     }

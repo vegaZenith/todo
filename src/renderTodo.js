@@ -113,9 +113,8 @@ let makeTodoView = function (todo, parent) {
 
         todoChecked = document.createElement("input");
         todoChecked.type = "checkbox";
-        if (todoContext.isDone) {
-            todoChecked.checked = true;
-        }
+        todoChecked.checked = todoContext.isDone;
+  
         todoChecked.addEventListener("change", () => {
             todoContext.toggleIsDone();
         });
@@ -144,9 +143,7 @@ let makeTodoView = function (todo, parent) {
 
         todoChecked = document.createElement("input");
         todoChecked.type = "checkbox";
-        if (todoContext.isDone) {
-            todoChecked.checked = true;
-        }
+        todoChecked.checked = todoContext.isDone;
         todoChecked.addEventListener("change", () => {
             todoContext.toggleIsDone();
         });

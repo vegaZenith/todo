@@ -51,7 +51,7 @@ let makeTodo = function(t, d, date, p){
     }
 
     function toggleIsDone(){
-        this.isDone = !isDone;
+        this.isDone = !this.isDone;
     }
 
     function addToSublist(title){

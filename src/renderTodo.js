@@ -88,6 +88,7 @@ let makeTodoView = function (todo, parent) {
             todoSublistItem.appendChild(todoSublistItemChecked);
             todoSublist.appendChild(todoSublistItem);
         });
+        console.log(todoSublist);
         return todoSublist;
     }
 
@@ -148,7 +149,7 @@ let makeTodoView = function (todo, parent) {
             todoContext.toggleIsDone();
         });
 
-        let todoSublist = renderSublist(todoContext);
+        todoSublist = renderSublist(todoContext);
 
         todoButton = document.createElement("button");
         todoButton.type = "button";

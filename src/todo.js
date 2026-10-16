@@ -1,6 +1,7 @@
 let todos = [];
 let priorityOptions = ["Low", "Medium", "High"];
 
+
 let makeSublistitem = function(title){
     let sublistTitle = title;
     let isDone = false;
@@ -76,6 +77,13 @@ let makeTodo = function(t, d, date, p){
         return sublistItem;
     }
 
+    function removeFromSublist(item){
+        console.log(this.sublist);
+        console.log(item);
+        this.sublist = this.sublist.filter(sub => sub.sublistTitle !== item.sublistTitle);
+        console.log(this.sublist);
+    }
+
     return {
         title,
         description,
@@ -90,7 +98,8 @@ let makeTodo = function(t, d, date, p){
         setPriority,
         setNotes,
         addToSublist,
-        toggleIsDone
+        toggleIsDone,
+        removeFromSublist
     }
 
 };

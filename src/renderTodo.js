@@ -46,9 +46,9 @@ let makeTodoView = function (todo, parent) {
         return todoPriorityInput;
     }
 
-    let renderEditableSublist = function (todo) {
+    let renderEditableSublist = function () {
         let todoSublist = document.createElement("ul");
-        todo.sublist.forEach(item => {
+        todoContext.sublist.forEach(item => {
             let todoSublistElement = document.createElement("li");
             let todoSublistInput = document.createElement("input");
             todoSublistInput.type = "text";
@@ -65,16 +65,24 @@ let makeTodoView = function (todo, parent) {
             todoSublistItemChecked.addEventListener("change", () => {
                 item.toggleIsDone();
             });
+            let removeSublistElementButton = document.createElement("button");
+            removeSublistElementButton.type = "button";
+            removeSublistElementButton.textContent = "Remove";
+            removeSublistElementButton.addEventListener("click", () => {
+                todoSublist.removeChild(todoSublistElement);
+                todoContext.removeFromSublist(item);
+            });
             todoSublistElement.appendChild(todoSublistInput);
             todoSublistElement.appendChild(todoSublistItemChecked);
+            todoSublistElement.appendChild(removeSublistElementButton);
             todoSublist.appendChild(todoSublistElement);
         });
         return todoSublist;
     }
 
-    let renderSublist = function (todo) {
+    let renderSublist = function () {
         let todoSublist = document.createElement("ul");
-        todo.sublist.forEach(item => {
+        todoContext.sublist.forEach(item => {
             let todoSublistItem = document.createElement("li");
             let todoSublistTitle = document.createElement("h4");
             todoSublistTitle.innerText = item.sublistTitle;
@@ -86,8 +94,16 @@ let makeTodoView = function (todo, parent) {
             todoSublistItemChecked.addEventListener("change", () => {
                 item.toggleIsDone();
             });
+            let removeSublistElementButton = document.createElement("button");
+            removeSublistElementButton.type = "button";
+            removeSublistElementButton.textContent = "Remove";
+            removeSublistElementButton.addEventListener("click", () => {
+                todoSublist.removeChild(todoSublistItem);
+                todoContext.removeFromSublist(item);
+            });
             todoSublistItem.appendChild(todoSublistTitle);
             todoSublistItem.appendChild(todoSublistItemChecked);
+            todoSublistItem.appendChild(removeSublistElementButton);
             todoSublist.appendChild(todoSublistItem);
         });
         return todoSublist;
@@ -121,7 +137,7 @@ let makeTodoView = function (todo, parent) {
             todoContext.toggleIsDone();
         });
 
-        todoSublist = renderEditableSublist(todoContext);
+        todoSublist = renderEditableSublist();
         todoSublistButton = renderSublistButton();
 
 
@@ -151,7 +167,7 @@ let makeTodoView = function (todo, parent) {
             todoContext.toggleIsDone();
         });
 
-        todoSublist = renderSublist(todoContext);
+        todoSublist = renderSublist();
 
         todoButton = document.createElement("button");
         todoButton.type = "button";
@@ -214,7 +230,7 @@ let makeTodoView = function (todo, parent) {
         todoSublistButton.addEventListener("click", () => {
             let todoSublistElement = document.createElement("li");
             let todoSublistInput = document.createElement("input");
-            let sublistItem = todo.addToSublist("");
+            let sublistItem = todoContext.addToSublist("");
             todoSublistInput.type = "text";
             todoSublistInput.addEventListener("change", () => {
                 sublistItem.setTitle(todoSublistInput.value);
@@ -228,8 +244,16 @@ let makeTodoView = function (todo, parent) {
             todoSublistItemChecked.addEventListener("change", () => {
                 sublistItem.toggleIsDone();
             });
+            let removeSublistElementButton = document.createElement("button");
+            removeSublistElementButton.type = "button";
+            removeSublistElementButton.textContent = "Remove";
+            removeSublistElementButton.addEventListener("click", () => {
+                todoSublist.removeChild(todoSublistElement);
+                todoContext.removeFromSublist(sublistItem);
+            });
             todoSublistElement.appendChild(todoSublistInput);
             todoSublistElement.appendChild(todoSublistItemChecked);
+            todoSublistElement.appendChild(removeSublistElementButton);
             todoSublist.appendChild(todoSublistElement);
         });
         return todoSublistButton;

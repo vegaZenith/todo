@@ -1,4 +1,4 @@
-import { makeTodo, getTodos, addTodo, priorityOptions } from "./todo.js";
+import { makeTodo, getTodos, addTodo, priorityOptions, removeTodo} from "./todo.js";
 
 let makeTodoView = function (todo, parent) {
     let parentElemeent = parent;
@@ -12,6 +12,7 @@ let makeTodoView = function (todo, parent) {
     let todoElement;
     let todoButton;
     let todoSublistButton;
+    let removeButton;
 
     let refresh = function (oldElement) {    
         todoElement.replaceChildren();
@@ -25,6 +26,7 @@ let makeTodoView = function (todo, parent) {
             todoElement.appendChild(todoSublistButton);
         }
         todoElement.appendChild(todoButton);
+        todoElement.appendChild(removeButton);
         parentElemeent.replaceChild(todoElement, oldElement);
     }
 
@@ -88,7 +90,6 @@ let makeTodoView = function (todo, parent) {
             todoSublistItem.appendChild(todoSublistItemChecked);
             todoSublist.appendChild(todoSublistItem);
         });
-        console.log(todoSublist);
         return todoSublist;
     }
 
@@ -125,6 +126,7 @@ let makeTodoView = function (todo, parent) {
 
 
         todoButton = renderConfirmEditButton();
+        renderRemoveButton();
     }
 
     let makeBasicTodoView = function () {
@@ -162,14 +164,30 @@ let makeTodoView = function (todo, parent) {
 
         });
         todoSublistButton = null;
-
+        renderRemoveButton();
+        todoElement.replaceChildren();
         todoElement.appendChild(todoTitle);
         todoElement.appendChild(todoDesc);
         todoElement.appendChild(todoDueDate);
         todoElement.appendChild(todoPriority);
         todoElement.appendChild(todoChecked);
         todoElement.appendChild(todoSublist);
+        if(todoSublistButton !== null){
+            todoElement.appendChild(todoSublistButton);
+        }
         todoElement.appendChild(todoButton);
+        todoElement.appendChild(removeButton);
+    }
+
+    let renderRemoveButton = function(){
+        removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.innerText = "Remove";
+        removeButton.addEventListener("click", () => {
+            removeTodo(todoContext);
+            todoElement.remove();
+            parentElemeent.remove();
+        });
     }
 
     let renderConfirmEditButton = function () {

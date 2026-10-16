@@ -20,6 +20,22 @@ let makeSublistitem = function(title){
         toggleIsDone
     };
 }
+let areEqual = function(a, b){
+    return  a.title === b.title &&
+            a.description === b.description &&
+            a.dueDate === b.dueDate &&
+            a.priority === b.priority;
+}
+
+let removeTodo = function(todo){
+    let toRemove;
+    todos.forEach(curr => {
+        if(areEqual(todo, curr)){
+            toRemove = curr;
+        }
+    })
+    todos = todos.filter(todo => todo !== toRemove);
+}
 
 let makeTodo = function(t, d, date, p){
     let title = t;
@@ -89,4 +105,4 @@ let getTodos = function(){
 
 
 
-export {makeTodo, addTodo, getTodos, priorityOptions};
+export {makeTodo, addTodo, getTodos, removeTodo, priorityOptions};

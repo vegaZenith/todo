@@ -1,4 +1,5 @@
 import { makeTodo, getTodos, addTodo, priorityOptions, removeTodo} from "./todo.js";
+import { makeChecklistRendering } from "./renderChecklist.js";
 
 let makeTodoView = function (todo, parent) {
     let parentElemeent = parent;
@@ -13,6 +14,7 @@ let makeTodoView = function (todo, parent) {
     let todoButton;
     let todoSublistButton;
     let removeButton;
+    let checkListRenderer = makeChecklistRendering(todoContext);
 
     let refresh = function (oldElement) {    
         todoElement.replaceChildren();
@@ -46,67 +48,8 @@ let makeTodoView = function (todo, parent) {
         return todoPriorityInput;
     }
 
-    let renderEditableSublist = function () {
-        let todoSublist = document.createElement("ul");
-        todoContext.sublist.forEach(item => {
-            let todoSublistElement = document.createElement("li");
-            let todoSublistInput = document.createElement("input");
-            todoSublistInput.type = "text";
-            todoSublistInput.value = item.sublistTitle;
-            todoSublistInput.addEventListener("change", () => {
-                console.log(todoSublist.value);
-                item.setTitle(todoSublistInput.value);
-            });
-            let todoSublistItemChecked = document.createElement("input");
-            todoSublistItemChecked.type = "checkbox";
-            if (item.isDone) {
-                todoSublistItemChecked.checked = true;
-            }
-            todoSublistItemChecked.addEventListener("change", () => {
-                item.toggleIsDone();
-            });
-            let removeSublistElementButton = document.createElement("button");
-            removeSublistElementButton.type = "button";
-            removeSublistElementButton.textContent = "Remove";
-            removeSublistElementButton.addEventListener("click", () => {
-                todoSublist.removeChild(todoSublistElement);
-                todoContext.removeFromSublist(item);
-            });
-            todoSublistElement.appendChild(todoSublistInput);
-            todoSublistElement.appendChild(todoSublistItemChecked);
-            todoSublistElement.appendChild(removeSublistElementButton);
-            todoSublist.appendChild(todoSublistElement);
-        });
-        return todoSublist;
-    }
-
-    let renderSublist = function () {
-        let todoSublist = document.createElement("ul");
-        todoContext.sublist.forEach(item => {
-            let todoSublistItem = document.createElement("li");
-            let todoSublistTitle = document.createElement("h4");
-            todoSublistTitle.innerText = item.sublistTitle;
-            let todoSublistItemChecked = document.createElement("input");
-            todoSublistItemChecked.type = "checkbox";
-            if (item.isDone) {
-                todoSublistItemChecked.checked = true;
-            }
-            todoSublistItemChecked.addEventListener("change", () => {
-                item.toggleIsDone();
-            });
-            let removeSublistElementButton = document.createElement("button");
-            removeSublistElementButton.type = "button";
-            removeSublistElementButton.textContent = "Remove";
-            removeSublistElementButton.addEventListener("click", () => {
-                todoSublist.removeChild(todoSublistItem);
-                todoContext.removeFromSublist(item);
-            });
-            todoSublistItem.appendChild(todoSublistTitle);
-            todoSublistItem.appendChild(todoSublistItemChecked);
-            todoSublistItem.appendChild(removeSublistElementButton);
-            todoSublist.appendChild(todoSublistItem);
-        });
-        return todoSublist;
+    let renderSublist = function (isEditable) {
+        return checkListRenderer.render(isEditable);
     }
 
     let makeEditableTodoView = function () {
@@ -137,7 +80,7 @@ let makeTodoView = function (todo, parent) {
             todoContext.toggleIsDone();
         });
 
-        todoSublist = renderEditableSublist();
+        todoSublist = renderSublist(true);
         todoSublistButton = renderSublistButton();
 
 
@@ -167,7 +110,7 @@ let makeTodoView = function (todo, parent) {
             todoContext.toggleIsDone();
         });
 
-        todoSublist = renderSublist();
+        todoSublist = renderSublist(false);
 
         todoButton = document.createElement("button");
         todoButton.type = "button";
@@ -228,33 +171,8 @@ let makeTodoView = function (todo, parent) {
         todoSublistButton.type = "button";
         todoSublistButton.innerText = "Add Sublist Item";
         todoSublistButton.addEventListener("click", () => {
-            let todoSublistElement = document.createElement("li");
-            let todoSublistInput = document.createElement("input");
-            let sublistItem = todoContext.addToSublist("");
-            todoSublistInput.type = "text";
-            todoSublistInput.addEventListener("change", () => {
-                sublistItem.setTitle(todoSublistInput.value);
-            });
-
-            let todoSublistItemChecked = document.createElement("input");
-            todoSublistItemChecked.type = "checkbox";
-            if (sublistItem.isDone) {
-                todoSublistItemChecked.checked = true;
-            }
-            todoSublistItemChecked.addEventListener("change", () => {
-                sublistItem.toggleIsDone();
-            });
-            let removeSublistElementButton = document.createElement("button");
-            removeSublistElementButton.type = "button";
-            removeSublistElementButton.textContent = "Remove";
-            removeSublistElementButton.addEventListener("click", () => {
-                todoSublist.removeChild(todoSublistElement);
-                todoContext.removeFromSublist(sublistItem);
-            });
-            todoSublistElement.appendChild(todoSublistInput);
-            todoSublistElement.appendChild(todoSublistItemChecked);
-            todoSublistElement.appendChild(removeSublistElementButton);
-            todoSublist.appendChild(todoSublistElement);
+            todoContext.addToSublist("");
+            todoSublist = renderSublist(true);
         });
         return todoSublistButton;
     }

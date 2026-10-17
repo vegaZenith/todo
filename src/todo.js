@@ -78,10 +78,7 @@ let makeTodo = function(t, d, date, p){
     }
 
     function removeFromSublist(item){
-        console.log(this.sublist);
-        console.log(item);
         this.sublist = this.sublist.filter(sub => sub.sublistTitle !== item.sublistTitle);
-        console.log(this.sublist);
     }
 
     return {

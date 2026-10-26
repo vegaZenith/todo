@@ -2,7 +2,7 @@ import { makeTodo, getTodos, addTodo, priorityOptions, removeTodo} from "./todo.
 import { makeChecklistRendering } from "./renderChecklist.js";
 
 let makeTodoView = function (todo, parent) {
-    let parentElemeent = parent;
+    let parentElement = parent;
     let todoContext = todo;
     let todoTitle;
     let todoDesc;
@@ -29,7 +29,11 @@ let makeTodoView = function (todo, parent) {
         }
         todoElement.appendChild(todoButton);
         todoElement.appendChild(removeButton);
-        parentElemeent.replaceChild(todoElement, oldElement);
+        if(parentElement.contains(oldElement)){
+            parentElement.replaceChild(todoElement, oldElement);
+        } else {
+            parentElement.appendChild(todoElement);
+        }
     }
 
     let renderPriorityInput = function () {
@@ -52,26 +56,50 @@ let makeTodoView = function (todo, parent) {
         return checkListRenderer.render(isEditable);
     }
 
-    let makeEditableTodoView = function () {
-        todoElement = document.createElement("form");
+    let renderMainElement = function(isEditable){
+        if(isEditable){
+            todoElement = document.createElement("form");
+            todoElement.method = "POST";
+            todoElement.action = "/";
+        } else {
+            todoElement = document.createElement("div");
+        }
+    }
 
-        todoElement.method = "POST";
-        todoElement.action = "/";
-        todoTitle = document.createElement("input");
-        todoTitle.type = "text";
-        todoTitle.value = todoContext.title;
+    let renderTitle = function(isEditable){
+        if(isEditable){
+            todoTitle = document.createElement("input");
+            todoTitle.type = "text";
+            todoTitle.value = todoContext.title;
+        } else {
+            todoTitle = document.createElement("h2");
+            todoTitle.innerText = todoContext.title;
+        }
+    }
 
-        todoDesc = document.createElement("input");
-        todoDesc.type = "text";
-        todoDesc.value = todoContext.description;
+    let rednerDescription = function(isEditable){
+        if(isEditable){
+            todoDesc = document.createElement("input");
+            todoDesc.type = "text";
+            todoDesc.value = todoContext.description;
+        } else {
+            todoDesc = document.createElement("p");
+            todoDesc.innerText = todoContext.description;
+        }
+    }
 
-        todoDueDate = document.createElement("input");
-        todoDueDate.type = "date";
-        todoDueDate.value = todoContext.dueDate;
+    let renderDueDate = function(isEditable){
+        if(isEditable){
+            todoDueDate = document.createElement("input");
+            todoDueDate.type = "date";
+            todoDueDate.value = todoContext.dueDate;
+        } else {
+            todoDueDate = document.createElement("p");
+            todoDueDate.innerText = todoContext.dueDate;
+        }
+    }
 
-
-        todoPriority = renderPriorityInput();
-
+    let renderCheckbox = function(){
         todoChecked = document.createElement("input");
         todoChecked.type = "checkbox";
         todoChecked.checked = todoContext.isDone;
@@ -79,63 +107,39 @@ let makeTodoView = function (todo, parent) {
         todoChecked.addEventListener("change", () => {
             todoContext.toggleIsDone();
         });
-
-        todoSublist = renderSublist(true);
-        todoSublistButton = renderSublistButton();
-
-
-        todoButton = renderConfirmEditButton();
-        renderRemoveButton();
     }
 
-    let makeBasicTodoView = function () {
-        todoElement = document.createElement("div");
-
-        todoTitle = document.createElement("h2");
-        todoTitle.innerText = todoContext.title;
-
-        todoDesc = document.createElement("p");
-        todoDesc.innerText = todoContext.description;
-
-        todoDueDate = document.createElement("p");
-        todoDueDate.innerText = todoContext.dueDate;
-
-        todoPriority = document.createElement("p");
-        todoPriority.innerText = todoContext.priority;
-
-        todoChecked = document.createElement("input");
-        todoChecked.type = "checkbox";
-        todoChecked.checked = todoContext.isDone;
-        todoChecked.addEventListener("change", () => {
-            todoContext.toggleIsDone();
-        });
-
-        todoSublist = renderSublist(false);
-
+    let renderEditButton = function(){
         todoButton = document.createElement("button");
         todoButton.type = "button";
         todoButton.innerText = "Edit";
         todoButton.addEventListener("click", () => {
-            let oldElement = todoElement;
-            makeEditableTodoView();
-            refresh(oldElement);
-            return;
-
+            render(true);
         });
-        todoSublistButton = null;
-        renderRemoveButton();
-        todoElement.replaceChildren();
-        todoElement.appendChild(todoTitle);
-        todoElement.appendChild(todoDesc);
-        todoElement.appendChild(todoDueDate);
-        todoElement.appendChild(todoPriority);
-        todoElement.appendChild(todoChecked);
-        todoElement.appendChild(todoSublist);
-        if(todoSublistButton !== null){
-            todoElement.appendChild(todoSublistButton);
+    }
+
+    let render = function(isEditable){
+        let oldElement = todoElement;
+        renderMainElement(isEditable);
+        renderTitle(isEditable);
+        rednerDescription(isEditable);
+        renderDueDate(isEditable);
+        todoPriority = renderPriorityInput();
+        renderCheckbox();
+        todoSublist = renderSublist(isEditable);
+        if(isEditable){
+            todoSublistButton = renderSublistButton();
+            todoButton = renderConfirmEditButton();
+        } else {
+            todoSublistButton = null;
+            renderEditButton();
         }
-        todoElement.appendChild(todoButton);
-        todoElement.appendChild(removeButton);
+        renderRemoveButton();
+        if(parentElement.children.length === 0){
+            parentElement.appendChild(todoElement);
+        }
+        
+        refresh(oldElement);
     }
 
     let renderRemoveButton = function(){
@@ -158,9 +162,8 @@ let makeTodoView = function (todo, parent) {
             todoContext.description = todoDesc.value;
             todoContext.dueDate = todoDueDate.value;
             todoContext.priority = todoPriority.value;
-            let oldElement = todoElement;
-            makeBasicTodoView();
-            refresh(oldElement);
+            render(false);
+            
             return;
         });
         return confirmEditButton;
@@ -177,7 +180,7 @@ let makeTodoView = function (todo, parent) {
         return todoSublistButton;
     }
 
-    makeBasicTodoView();
+    render(false);
     return todoElement;
 }
 

@@ -58,7 +58,7 @@ let renderTodoList = function() {
     getTodos().forEach(todo => {
         let todoListItem = document.createElement("li");
 
-        todoListItem.appendChild(makeTodoView(todo, todoListItem));
+        makeTodoView(todo, todoListItem);
         todoList.appendChild(todoListItem);
     });
     return todoList

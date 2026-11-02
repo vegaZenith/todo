@@ -1,3 +1,5 @@
+import {modifyTodo} from "./todo.js";
+
 let makeChecklistRendering = function(todo){
     let todoContext = todo;
     let todoChecklistElement = document.createElement("ul");
@@ -5,7 +7,7 @@ let makeChecklistRendering = function(todo){
     let render = function(isEditable){
         todoChecklistElement.replaceChildren();
         todoContext.sublist.forEach(item => {
-            let todoChecklisttItem = document.createElement("li");
+            let todoChecklistItem = document.createElement("li");
             let checklistItemTitle = renderChecklistItemTitle(item, isEditable);
             let checklistItemChecked = document.createElement("input");
             checklistItemChecked.type = "checkbox";
@@ -14,18 +16,20 @@ let makeChecklistRendering = function(todo){
             }
             checklistItemChecked.addEventListener("change", () => {
                 item.toggleIsDone();
+                modifyTodo(todoContext);
             });
             let removeChecklistItemButton = document.createElement("button");
             removeChecklistItemButton.type = "button";
             removeChecklistItemButton.textContent = "Remove";
             removeChecklistItemButton.addEventListener("click", () => {
-                todoChecklistElement.removeChild(todoChecklisttItem);
+                todoChecklistElement.removeChild(todoChecklistItem);
                 todoContext.removeFromSublist(item);
+                modifyTodo(todoContext);
             });
-            todoChecklisttItem.appendChild(checklistItemTitle);
-            todoChecklisttItem.appendChild(checklistItemChecked);
-            todoChecklisttItem.appendChild(removeChecklistItemButton);
-            todoChecklistElement.appendChild(todoChecklisttItem);
+            todoChecklistItem.appendChild(checklistItemTitle);
+            todoChecklistItem.appendChild(checklistItemChecked);
+            todoChecklistItem.appendChild(removeChecklistItemButton);
+            todoChecklistElement.appendChild(todoChecklistItem);
         });
         return todoChecklistElement;
     }
@@ -38,6 +42,7 @@ let makeChecklistRendering = function(todo){
             checklistItemTitle.value = item.sublistTitle;
             checklistItemTitle.addEventListener("change", () => {
                 item.setTitle(checklistItemTitle.value);
+                modifyTodo(todoContext);
             });
         } else {
             checklistItemTitle = document.createElement("h4");

@@ -1,4 +1,4 @@
-import { makeTodo, getTodos, addTodo, priorityOptions } from "./todo.js";
+import { makeTodo, getTodos, addTodo, priorityOptions, loadTodos } from "./todo.js";
 import {makeTodoView} from  "./renderTodo.js";
 
 let renderPriorityInput = function () {
@@ -77,7 +77,6 @@ let renderAddTodoButton = function(mainContent){
 }
 
 let renderMainContent = function(clear) {
-
     let mainBody = document.querySelector("#main");
     if(clear){
         mainBody.innerHTML = "";

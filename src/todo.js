@@ -1,16 +1,16 @@
 let todos = [];
 let priorityOptions = ["Low", "Medium", "High"];
+let currentID = 1;
 
-
-let makeSublistitem = function(title){
+let makeSublistItem = function(title){
     let sublistTitle = title;
     let isDone = false;
 
-    function setTitle(newTitle){
+    let setTitle = function(newTitle){
         this.sublistTitle = newTitle;
     }
 
-    function toggleIsDone(){
+    let toggleIsDone = function(){
         this.isDone = !this.isDone;
     }
 
@@ -36,9 +36,11 @@ let removeTodo = function(todo){
         }
     })
     todos = todos.filter(todo => todo !== toRemove);
+    localStorage.removeItem("todo-"+toRemove.id);
 }
 
 let makeTodo = function(t, d, date, p){
+    let id = currentID++;
     let title = t;
     let description = d;
     let dueDate = date;
@@ -72,7 +74,7 @@ let makeTodo = function(t, d, date, p){
     }
 
     function addToSublist(title){
-        let sublistItem = makeSublistitem(title);
+        let sublistItem = makeSublistItem(title);
         this.sublist.push(sublistItem);
         return sublistItem;
     }
@@ -96,19 +98,49 @@ let makeTodo = function(t, d, date, p){
         setNotes,
         addToSublist,
         toggleIsDone,
-        removeFromSublist
+        removeFromSublist,
+        id
     }
 
 };
 
 let addTodo = function(todo){
     todos.push(todo);
+    console.log("add");
+    console.log(todo.sublist);
+
+    localStorage.setItem("todo-"+todo.id, JSON.stringify(todo));
 };
 
 let getTodos = function(){
     return todos;
 }
 
+let loadTodos = function(){
+    let id = 1;
+    let curr = "todo-" + id;
+    while(localStorage.getItem(curr) != undefined){
+        let todoParsed = JSON.parse(localStorage.getItem(curr));
+        console.log("load");
+        console.log(todoParsed.sublist);
+        let todo = makeTodo(todoParsed.title, todoParsed.description, todoParsed.dueDate, todoParsed.priority);
+        todo.isDone = todoParsed.isDone;
+        todoParsed.sublist.forEach(item => {
+            let newItem = todo.addToSublist(item.sublistTitle);
+            newItem.isDone = item.isDone;
+        });
+        todos.push(todo);
+        console.log(todo);
+        id++;
+        curr = "todo-"+id;
+    }
+}
 
+let modifyTodo = function(todo){
+    let todoKey = "todo-" + todo.id;
+    console.log("mod");
+    console.log(todo.sublist);
+    localStorage.setItem(todoKey, JSON.stringify(todo));
+}
 
-export {makeTodo, addTodo, getTodos, removeTodo, priorityOptions};
+export {makeTodo, addTodo, getTodos, removeTodo, priorityOptions, loadTodos, modifyTodo};

@@ -1,4 +1,4 @@
-import { makeTodo, getTodos, addTodo, priorityOptions, removeTodo} from "./todo.js";
+import { makeTodo, getTodos, addTodo, priorityOptions, removeTodo, modifyTodo} from "./todo.js";
 import { makeChecklistRendering } from "./renderChecklist.js";
 
 let makeTodoView = function (todo, parent) {
@@ -106,6 +106,7 @@ let makeTodoView = function (todo, parent) {
   
         todoChecked.addEventListener("change", () => {
             todoContext.toggleIsDone();
+            modifyTodo(todoContext);
         });
     }
 
@@ -162,6 +163,7 @@ let makeTodoView = function (todo, parent) {
             todoContext.description = todoDesc.value;
             todoContext.dueDate = todoDueDate.value;
             todoContext.priority = todoPriority.value;
+            modifyTodo(todoContext);
             render(false);
             
             return;

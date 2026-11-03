@@ -106,8 +106,6 @@ let makeTodo = function(t, d, date, p){
 
 let addTodo = function(todo){
     todos.push(todo);
-    console.log("add");
-    console.log(todo.sublist);
 
     localStorage.setItem("todo-"+todo.id, JSON.stringify(todo));
 };
@@ -121,8 +119,6 @@ let loadTodos = function(){
     let curr = "todo-" + id;
     while(localStorage.getItem(curr) != undefined){
         let todoParsed = JSON.parse(localStorage.getItem(curr));
-        console.log("load");
-        console.log(todoParsed.sublist);
         let todo = makeTodo(todoParsed.title, todoParsed.description, todoParsed.dueDate, todoParsed.priority);
         todo.isDone = todoParsed.isDone;
         todoParsed.sublist.forEach(item => {
@@ -130,7 +126,6 @@ let loadTodos = function(){
             newItem.isDone = item.isDone;
         });
         todos.push(todo);
-        console.log(todo);
         id++;
         curr = "todo-"+id;
     }

@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Roboto, Arial, sans-serif;
+    background-color: bisque;
+}
+
+button {
+    background-color: green;
+    color: white;
+    border-radius: 20px;
+    border: none;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    marker: none;
+}
+
+.projects {
+    display: inline-grid;
+}
+
+.project {
+    padding: 1em;
+    border: 1px solid black;
+}
+

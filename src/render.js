@@ -10,9 +10,10 @@ let renderMainContent = function(clear) {
         addProject(makeProject());
     }
     let projectsList = document.createElement("ul");
+    projectsList.setAttribute("class", "projects");
     getProjects().forEach(p => {
-        console.log(p);
         let projectListItem = document.createElement("li");
+        projectListItem.setAttribute("class", "project");
         projectListItem.appendChild(makeProjectView(p));
         projectsList.appendChild(projectListItem);
     });

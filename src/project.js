@@ -1,6 +1,5 @@
 let projects = [];
 let makeProject = function(){
-    console.log("Hello");
     let title = "New Project";
     let todos = [];
     
@@ -15,7 +14,6 @@ let makeProject = function(){
     let removeTodo = function(todo){
         this.todos = this.todos.filter(t => t != todo);
     }
-    console.log(projects);
     return {title, setTitle, addTodo, removeTodo, todos};
 }
 

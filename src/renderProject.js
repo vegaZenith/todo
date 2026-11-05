@@ -69,9 +69,10 @@ let makeProjectView = function (project) {
 
     let renderTodos = function () {
         todos = document.createElement("ul");
+        todos.setAttribute("class", "todos");
         getTodos().forEach(todo => {
             let todoListItem = document.createElement("li");
-
+            todoListItem.setAttribute("class", "todo");
             makeTodoView(todo, todoListItem);
             todos.appendChild(todoListItem);
         });
